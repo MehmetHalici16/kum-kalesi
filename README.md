@@ -4,6 +4,8 @@ HTML5 Canvas ve JavaScript ile geliştirilmiş 2D tower defense (kale savunma) o
 
 ## 🎮 Oyun Hakkında
 
+**🕹 OYNA:** [https://MehmetHalici16.github.io/kum-kalesi/](https://MehmetHalici16.github.io/kum-kalesi/)
+
 Kum Kalesi, çöl ortamında geçen bir kale savunma oyunudur. Gündüz vakti binalarınızı inşa edin, gece düşman dalgalarından kalenizi koruyun!
 
 ### 🎯 Hedef / Zorluk (Challenge)
