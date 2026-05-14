@@ -2,19 +2,19 @@
 
 HTML5 Canvas ve JavaScript ile geliştirilmiş 2D tower defense (kale savunma) oyunu.
 
-## 🎮 Oyun Hakkında
+## Oyun Hakkında
 
 **🕹 OYNA:** [https://MehmetHalici16.github.io/kum-kalesi/](https://MehmetHalici16.github.io/kum-kalesi/)
 
 Kum Kalesi, çöl ortamında geçen bir kale savunma oyunudur. Gündüz vakti binalarınızı inşa edin, gece düşman dalgalarından kalenizi koruyun!
 
-### 🎯 Hedef / Zorluk (Challenge)
+### Hedef / Zorluk (Challenge)
 - Merkezdeki kalenizi düşman dalgalarına karşı savunun
 - Her gece düşmanlar daha güçlü ve çeşitli olur
 - Kaynakları akıllıca yönetip stratejik savunma hatları oluşturun
 - Mümkün olduğunca çok gece hayatta kalın ve yüksek skor elde edin
 
-### 🕹 Kontroller
+### Kontroller
 | Kontrol | İşlev |
 |---------|-------|
 | **Fare (Sol Tık)** | Bina seçme ve yerleştirme |
@@ -25,7 +25,7 @@ Kum Kalesi, çöl ortamında geçen bir kale savunma oyunudur. Gündüz vakti bi
 | **M** | Müzik aç/kapa |
 | **S** | Ses aç/kapa |
 
-## 📸 Oyun Ekran Görüntüleri
+## Oyun Ekran Görüntüleri
 
 ### Gündüz Fazı - İnşa Zamanı
 ![Gündüz](assets/images/screenshot_day.png)
@@ -33,7 +33,7 @@ Kum Kalesi, çöl ortamında geçen bir kale savunma oyunudur. Gündüz vakti bi
 ### Gece Fazı - Savunma Zamanı
 ![Gece](assets/images/screenshot_night.png)
 
-## 🏗 Bina Türleri
+## Bina Türleri
 
 | Bina | Maliyet | İşlev |
 |------|---------|-------|
@@ -44,25 +44,25 @@ Kum Kalesi, çöl ortamında geçen bir kale savunma oyunudur. Gündüz vakti bi
 | 🌾 Çiftlik | 20💰 5🪨 | Her gece 10 yiyecek üretir |
 | ⛏ Maden | 20💰 5🌾 | Her gece 12 taş üretir |
 
-## 👾 Düşman Türleri
+## Düşman Türleri
 - **İstilacı (Normal)**: Standart hız ve dayanıklılık
 - **Koşucu (Hızlı)**: Yüksek hız, düşük can
 - **Yıkıcı (Tank)**: Yavaş ama çok dayanıklı, yüksek hasar
 - **Uçan**: Duvarları atlayabilir, kanatlarıyla uçar
 
-## 🔧 Teknoloji
+## Teknoloji
 - **HTML5 Canvas** - Oyun rendering
 - **Vanilla JavaScript** - Oyun mantığı (harici kütüphane yok)
 - **CSS3** - Sayfa düzeni
 - **Web Audio API** - Ses efektleri ve müzik
 
-## 🎮 İlham Alınan Oyun
+## İlham Alınan Oyun
 **Dune Keepers** - Brackeys Game Jam 2024.2 birincisi
 - Bağlantı: [aznoqmous.itch.io/dune-keepers](https://aznoqmous.itch.io/dune-keepers)
 - Tema: "Calm before the storm"
 - Gündüz inşa / gece savunma döngüsü mekaniklerinden ilham alınmıştır.
 
-## 📁 Proje Yapısı
+## Proje Yapısı
 ```
 ├── index.html          # Ana HTML sayfası
 ├── css/
@@ -85,6 +85,6 @@ Kum Kalesi, çöl ortamında geçen bir kale savunma oyunudur. Gündüz vakti bi
 └── AI.md               # Yapay zeka kullanım dökümantasyonu
 ```
 
-## 🎵 Asset Kaynakları
+## Asset Kaynakları
 - Tüm görseller Canvas API ile kodlanarak çizilmiştir (harici görsel kullanılmamıştır)
 - Ses efektleri Web Audio API ile programatik olarak üretilmektedir
