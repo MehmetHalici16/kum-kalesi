@@ -1,7 +1,4 @@
-/**
- * game.js - Ana Oyun Döngüsü
- * Tüm oyun sistemlerini koordine eder ve canvas üzerine çizer.
- */
+// game.js - Ana oyun döngüsü
 
 class Oyun {
     constructor() {
@@ -44,7 +41,7 @@ class Oyun {
         requestAnimationFrame((z) => this._oyunDongusu(z));
     }
 
-    /** Olay dinleyicilerini ayarlar */
+    // Olaylar
     _olaylariDinle() {
         // Fare hareketleri
         this.canvas.addEventListener('mousemove', (e) => {
@@ -83,7 +80,7 @@ class Oyun {
         });
     }
 
-    /** Tıklama işleme */
+    // Tıklama
     _tiklamaIsleme(tX, tY) {
         sesYoneticisi.baslat(); // İlk etkileşimde Audio Context başlat
 
@@ -123,7 +120,7 @@ class Oyun {
         }
     }
 
-    /** Klavye tuş işleme */
+    // Klavye
     _tusIsleme(tus) {
         if (this.durum === OYUN_DURUMU.GUNDUZ) {
             // 1-6 tuşları bina seçimi
@@ -157,7 +154,7 @@ class Oyun {
         }
     }
 
-    /** Oyunu başlatır/sıfırlar */
+
     _oyunuBaslat() {
         this.grid = new Grid();
         this.kaynaklar.sifirla();
@@ -174,7 +171,7 @@ class Oyun {
         sesYoneticisi.gunduzBaslangiçSesi();
     }
 
-    /** Bina yerleştirme */
+
     _binaYerlestir(tX, tY) {
         const gridPos = pikseledenGride(tX, tY);
         if (!gridIcindeMi(gridPos.sutun, gridPos.satir)) return;
@@ -205,21 +202,21 @@ class Oyun {
         }
     }
 
-    /** Gece geçişi başlatır */
+
     _geceyeGec() {
         this.durum = OYUN_DURUMU.GECE_GECIS;
         this.gecisZamani = 0;
         sesYoneticisi.geceBaslangiçSesi();
     }
 
-    /** Gündüz geçişi başlatır */
+
     _gunduzeGec() {
         this.durum = OYUN_DURUMU.GUNDUZ_GECIS;
         this.gecisZamani = 0;
         sesYoneticisi.gunduzBaslangiçSesi();
     }
 
-    /** Üretim binalarından kaynak toplar */
+    // Üretim binalarından kaynak toplama
     _kaynaklariTopla() {
         const binalar = this.grid.tumBinalariAl();
         for (const bina of binalar) {
@@ -252,7 +249,7 @@ class Oyun {
         requestAnimationFrame((z) => this._oyunDongusu(z));
     }
 
-    /** Oyun mantığını günceller */
+    /** Oyun mantıgı */
     _guncelle(dt) {
         if (this.durum === OYUN_DURUMU.MENU || this.durum === OYUN_DURUMU.OYUN_BITTI) return;
 
@@ -379,7 +376,7 @@ class Oyun {
         }
     }
 
-    /** Oyunu çizer */
+    // cizim
     _ciz() {
         const ctx = this.ctx;
         ctx.clearRect(0, 0, CANVAS_GENISLIK, CANVAS_YUKSEKLIK);
@@ -441,7 +438,7 @@ class Oyun {
         }
     }
 
-    /** Gökyüzü gradyanı çizer */
+    // gok arka planı
     _gokyuzuCiz(ctx) {
         const geceMi = this.durum === OYUN_DURUMU.GECE || this.durum === OYUN_DURUMU.GECE_GECIS;
         const ust = geceMi ? RENKLER.GECE_UST : RENKLER.GUNDUZ_UST;
@@ -468,7 +465,7 @@ class Oyun {
         }
     }
 
-    /** Kaleyi çizer */
+    // kale cizimi
     _kaleCiz(ctx) {
         const kaleX = KALE_SUTUN * HUCRE_BOYUTU;
         const kaleY = KALE_SATIR * HUCRE_BOYUTU;

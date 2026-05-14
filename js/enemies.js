@@ -1,7 +1,4 @@
-/**
- * enemies.js - Düşman Sistemi ve Dalga Yönetimi
- * Farklı düşman türleri, hareketleri ve dalga mekanizmasını yönetir.
- */
+// enemies.js - Düşman ve dalga sistemi
 
 // Düşman türleri ve özellikleri
 const DUSMAN_TURU = {
@@ -59,9 +56,7 @@ const DUSMAN_VERILERI = {
     }
 };
 
-/**
- * Düşman sınıfı
- */
+// Dusman sinifi
 class Dusman {
     constructor(tur, x, y) {
         const veri = DUSMAN_VERILERI[tur];
@@ -94,10 +89,7 @@ class Dusman {
         this.hasarAnimasyon = 0;
     }
 
-    /**
-     * Düşmana hasar verir
-     * @returns {boolean} Öldüyse true
-     */
+    // hasar al, olduyse true don
     hasarAl(miktar) {
         this.can -= miktar;
         this.hasarAnimasyon = 0.3;
@@ -110,9 +102,7 @@ class Dusman {
         return false;
     }
 
-    /**
-     * Düşmanı günceller - hareket ve saldırı mantığı
-     */
+    // hareket ve saldiri
     guncelle(deltaZaman, grid, kaleCan) {
         if (!this.pikseldeMi) return;
 
@@ -184,9 +174,7 @@ class Dusman {
         }
     }
 
-    /**
-     * Düşmanı canvas üzerine çizer
-     */
+    // ciz
     ciz(ctx) {
         if (!this.pikseldeMi) return;
 
@@ -304,9 +292,7 @@ class DalgaYoneticisi {
         this.dalgaBittiMi = false;
     }
 
-    /**
-     * Yeni dalga oluşturur
-     */
+    // yeni dalga olustur
     yeniDalga() {
         this.dalgaNumarasi++;
         this.uretilenSayi = 0;
@@ -320,9 +306,7 @@ class DalgaYoneticisi {
         this.uretimAraligi = Math.max(0.5, 1.5 - this.dalgaNumarasi * 0.05);
     }
 
-    /**
-     * Dalga içeriğini belirler - dalga numarası arttıkça zorluk artar
-     */
+    // dalga icerigi - zorluk artisi
     _dalgaIcerigi() {
         const dusmanlar = [];
         const dalga = this.dalgaNumarasi;
@@ -361,10 +345,7 @@ class DalgaYoneticisi {
         return dusmanlar;
     }
 
-    /**
-     * Zamana göre düşman üretir
-     * @returns {Dusman|null} Yeni üretilen düşman veya null
-     */
+    // zamana gore dusman uret
     guncelle(deltaZaman) {
         if (this.dalgaBittiMi) return null;
 
@@ -395,9 +376,7 @@ class DalgaYoneticisi {
         return null;
     }
 
-    /**
-     * Haritanın kenarlarından rastgele bir spawn konumu seçer
-     */
+    // kenarlardan rastgele spawn
     _spawnKonumu() {
         const kenar = rastgeleTamSayi(0, 3); // 0: üst, 1: sağ, 2: alt, 3: sol
         let x, y;
@@ -424,23 +403,17 @@ class DalgaYoneticisi {
         return { x, y };
     }
 
-    /**
-     * Toplam düşman sayısını döndürür
-     */
+
     toplamDusmanSayisi() {
         return this.dalgaDusmanlari.length;
     }
 
-    /**
-     * Kalan düşman sayısını döndürür
-     */
+
     kalanDusmanSayisi() {
         return this.dalgaDusmanlari.length - this.uretilenSayi;
     }
 
-    /**
-     * Dalga yöneticisini sıfırlar
-     */
+
     sifirla() {
         this.dalgaNumarasi = 0;
         this.dalgaDusmanlari = [];

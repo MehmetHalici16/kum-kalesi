@@ -1,19 +1,7 @@
-/**
- * projectiles.js - Mermi Sistemi
- * Kulelerin attığı ok ve top mermilerini yönetir.
- * Çarpışma tespiti ve hasar uygulaması bu dosyada yapılır.
- */
+// projectiles.js - Mermi sistemi (ok ve top)
 
 class Mermi {
-    /**
-     * Mermi oluşturur
-     * @param {number} x - Başlangıç x konumu
-     * @param {number} y - Başlangıç y konumu
-     * @param {Dusman} hedef - Hedef düşman
-     * @param {number} hasar - Verilecek hasar miktarı
-     * @param {string} tur - Mermi türü ('ok' veya 'top')
-     * @param {number} patlamaYaricapi - Patlama yarıçapı (sadece top için)
-     */
+
     constructor(x, y, hedef, hasar, tur, patlamaYaricapi) {
         this.x = x;
         this.y = y;
@@ -37,10 +25,7 @@ class Mermi {
         this.izMaxUzunluk = tur === 'ok' ? 5 : 3;
     }
 
-    /**
-     * Mermiyi günceller - hareket ve çarpışma kontrolü
-     * @returns {object|null} Patlama bilgisi veya null
-     */
+    // hareket + carpisma kontrolu
     guncelle(deltaZaman, dusmanlar, parcaciklar) {
         if (!this.aktifMi) return null;
 
@@ -96,9 +81,7 @@ class Mermi {
         return null;
     }
 
-    /**
-     * Top mermisi patlaması - alan hasarı
-     */
+    // top patlama - alan hasari
     _patla(dusmanlar, parcaciklar) {
         const oluler = [];
         
@@ -146,9 +129,7 @@ class Mermi {
         return { olduMu: oluler.length > 0, oluler: oluler };
     }
 
-    /**
-     * Çarpma anında parçacık efekti oluşturur
-     */
+    // carpisma parcacik efekti
     _carpmaEfekti(parcaciklar) {
         if (!parcaciklar) return;
         
@@ -164,9 +145,7 @@ class Mermi {
         }
     }
 
-    /**
-     * Mermiyi canvas üzerine çizer
-     */
+    // ciz
     ciz(ctx) {
         if (!this.aktifMi) return;
 

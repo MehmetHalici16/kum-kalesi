@@ -1,7 +1,4 @@
-/**
- * resources.js - Kaynak Yönetim Sistemi
- * Oyundaki altın, taş ve yiyecek kaynaklarını yönetir.
- */
+// resources.js - Kaynak yonetimi (altin, tas, yiyecek)
 
 class KaynakYoneticisi {
     constructor() {
@@ -12,9 +9,7 @@ class KaynakYoneticisi {
         this.skor = 0;
     }
 
-    /**
-     * Belirtilen miktarda kaynak eklenir
-     */
+
     kaynakEkle(tur, miktar) {
         switch (tur) {
             case 'altin':
@@ -29,10 +24,7 @@ class KaynakYoneticisi {
         }
     }
 
-    /**
-     * Belirtilen miktarda kaynak harcanır
-     * @returns {boolean} Yeterli kaynak varsa true döner
-     */
+    // kaynak harcama - yeterli yoksa false doner
     kaynakHarca(altinMaliyet, tasMaliyet, yiyecekMaliyet) {
         if (this.altin >= altinMaliyet && 
             this.tas >= tasMaliyet && 
@@ -45,25 +37,19 @@ class KaynakYoneticisi {
         return false;
     }
 
-    /**
-     * Yeterli kaynak olup olmadığını kontrol eder
-     */
+
     yeterliMi(altinMaliyet, tasMaliyet, yiyecekMaliyet) {
         return this.altin >= altinMaliyet && 
                this.tas >= tasMaliyet && 
                this.yiyecek >= yiyecekMaliyet;
     }
 
-    /**
-     * Skor ekler
-     */
+
     skorEkle(miktar) {
         this.skor += miktar;
     }
 
-    /**
-     * Kaynakları sıfırlar (yeni oyun için)
-     */
+
     sifirla() {
         this.altin = BASLANGIC_ALTIN;
         this.tas = BASLANGIC_TAS;

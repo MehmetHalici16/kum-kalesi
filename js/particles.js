@@ -1,20 +1,7 @@
-/**
- * particles.js - Parçacık Efekt Sistemi
- * Patlama, hasar, inşa gibi olaylar için görsel parçacık efektleri üretir.
- * Oyun sahnesinin görsel zenginliğini artırır.
- */
+// particles.js - Parcacik efektleri (patlama, toz vs)
 
 class Parcacik {
-    /**
-     * Tek bir parçacık oluşturur
-     * @param {number} x - Başlangıç x konumu
-     * @param {number} y - Başlangıç y konumu
-     * @param {number} hizX - Yatay hız (piksel/saniye)
-     * @param {number} hizY - Dikey hız (piksel/saniye)
-     * @param {number} omur - Yaşam süresi (saniye)
-     * @param {number} boyut - Parçacık boyutu (piksel)
-     * @param {string} renk - Parçacık rengi
-     */
+
     constructor(x, y, hizX, hizY, omur, boyut, renk) {
         this.x = x;
         this.y = y;
@@ -28,9 +15,7 @@ class Parcacik {
         this.yerCekimi = 60; // Piksel/saniye^2 aşağı ivme
     }
 
-    /**
-     * Parçacığı günceller
-     */
+
     guncelle(deltaZaman) {
         if (!this.aktifMi) return;
 
@@ -48,9 +33,7 @@ class Parcacik {
         }
     }
 
-    /**
-     * Parçacığı çizer
-     */
+
     ciz(ctx) {
         if (!this.aktifMi) return;
 
@@ -64,24 +47,18 @@ class Parcacik {
     }
 }
 
-/**
- * Parçacık yöneticisi - toplu işlemler için yardımcı sınıf
- */
+// parcacik yoneticisi
 class ParcacikYoneticisi {
     constructor() {
         this.parcaciklar = [];
     }
 
-    /**
-     * Yeni parçacık ekler
-     */
+
     ekle(parcacik) {
         this.parcaciklar.push(parcacik);
     }
 
-    /**
-     * İnşa efekti - bina yerleştirildiğinde toz parçacıkları
-     */
+    // insa efekti - toz parcaciklari
     insaEfekti(x, y) {
         for (let i = 0; i < 10; i++) {
             this.parcaciklar.push(new Parcacik(
@@ -96,9 +73,7 @@ class ParcacikYoneticisi {
         }
     }
 
-    /**
-     * Bina yıkım efekti
-     */
+    // yikim efekti
     yikimEfekti(x, y) {
         for (let i = 0; i < 20; i++) {
             this.parcaciklar.push(new Parcacik(
@@ -125,9 +100,7 @@ class ParcacikYoneticisi {
         }
     }
 
-    /**
-     * Düşman ölüm efekti
-     */
+    // dusman olum efekti
     olumEfekti(x, y, renk) {
         for (let i = 0; i < 12; i++) {
             this.parcaciklar.push(new Parcacik(
@@ -141,9 +114,7 @@ class ParcacikYoneticisi {
         }
     }
 
-    /**
-     * Kaynak toplama efekti (yıldız parıltısı)
-     */
+    // kaynak toplama pariltisi
     kaynakEfekti(x, y, renk) {
         for (let i = 0; i < 6; i++) {
             const aci = (Math.PI * 2 / 6) * i;
@@ -158,9 +129,7 @@ class ParcacikYoneticisi {
         }
     }
 
-    /**
-     * Tüm parçacıkları günceller ve ölü parçacıkları temizler
-     */
+
     guncelle(deltaZaman) {
         for (let i = this.parcaciklar.length - 1; i >= 0; i--) {
             this.parcaciklar[i].guncelle(deltaZaman);
@@ -170,18 +139,14 @@ class ParcacikYoneticisi {
         }
     }
 
-    /**
-     * Tüm parçacıkları çizer
-     */
+
     ciz(ctx) {
         for (const parcacik of this.parcaciklar) {
             parcacik.ciz(ctx);
         }
     }
 
-    /**
-     * Tüm parçacıkları temizler
-     */
+
     temizle() {
         this.parcaciklar = [];
     }

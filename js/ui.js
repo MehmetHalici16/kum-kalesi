@@ -1,12 +1,4 @@
-/**
- * ui.js - Kullanıcı Arayüzü Çizim Sistemi
- * Oyundaki tüm UI elemanlarını canvas üzerine çizer:
- * - Kaynak göstergeleri
- * - Bina seçim paneli
- * - Gece/gündüz bilgisi
- * - Menü ve oyun sonu ekranları
- * - Kale can çubuğu
- */
+// ui.js - Arayuz cizim sistemi
 
 class ArayuzYoneticisi {
     constructor() {
@@ -16,9 +8,7 @@ class ArayuzYoneticisi {
         this.fareUzerindeBina = null; // Fare hangi bina butonunun üzerinde
     }
 
-    /**
-     * Üst bilgi çubuğunu çizer - kaynaklar, dalga bilgisi, gece/gün
-     */
+    // ust panel - kaynaklar, dalga, gun/gece bilgisi
     ustPanelCiz(ctx, kaynaklar, gece, dalgaNo, kaleCan, kaleMaxCan, gunSayaci) {
         // Panel arkaplanı
         ctx.fillStyle = RENKLER.UI_ARKAPLAN;
@@ -146,9 +136,7 @@ class ArayuzYoneticisi {
         this._kaleCanCubuguCiz(ctx, kaleCan, kaleMaxCan);
     }
 
-    /**
-     * "Geceyi Başlat" butonunu çizer
-     */
+    // gece baslat butonu
     _geceButonuCiz(ctx, x, y, g, u) {
         ctx.fillStyle = 'rgba(244, 67, 54, 0.6)';
         this._yuvarlatilmisDikdortgen(ctx, x, y, g, u, 4);
@@ -165,9 +153,7 @@ class ArayuzYoneticisi {
         ctx.textAlign = 'left';
     }
 
-    /**
-     * Kale can çubuğunu üst ortada çizer
-     */
+    // kale can cubugu - ust ortada
     _kaleCanCubuguCiz(ctx, kaleCan, kaleMaxCan) {
         const cubukGenislik = 200;
         const cubukYukseklik = 14;
@@ -196,15 +182,13 @@ class ArayuzYoneticisi {
         ctx.textAlign = 'left';
     }
 
-    /**
-     * Tooltip (bina bilgi kutusu) çizer
-     */
+    // tooltip - bina bilgi kutusu
     tooltipCiz(ctx, fareX, fareY) {
         if (!this.fareUzerindeBina) return;
 
         const veri = BINA_VERILERI[this.fareUzerindeBina];
         const genislik = 180;
-        const yukseklik = 65;
+        const yukseklik = veri.menzil ? 80 : 65;
         let tipX = fareX + 10;
         let tipY = fareY - yukseklik - 10;
 
@@ -232,13 +216,11 @@ class ArayuzYoneticisi {
         ctx.fillText('❤ Can: ' + veri.maxCan, tipX + 8, tipY + 50);
 
         if (veri.menzil) {
-            ctx.fillText('🎯 Menzil: ' + veri.menzil + ' | Hasar: ' + veri.hasar, tipX + 8, tipY + 50);
+            ctx.fillText('🎯 Menzil: ' + veri.menzil + ' | Hasar: ' + veri.hasar, tipX + 8, tipY + 66);
         }
     }
 
-    /**
-     * Başlangıç menüsünü çizer
-     */
+    // baslangic menusu
     menuCiz(ctx, zaman) {
         // Karanlık arkaplan
         ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
@@ -295,9 +277,7 @@ class ArayuzYoneticisi {
         ctx.textAlign = 'left';
     }
 
-    /**
-     * Oyun bitti ekranını çizer
-     */
+    // oyun bitti ekrani
     oyunBittiCiz(ctx, kaynaklar, dalgaNo, zaman) {
         // Karanlık arkaplan
         ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
@@ -341,9 +321,7 @@ class ArayuzYoneticisi {
         ctx.textAlign = 'left';
     }
 
-    /**
-     * Gece/gündüz geçiş animasyonunu çizer
-     */
+    // gece/gunduz gecis animasyonu
     gecisCiz(ctx, oran, geceye) {
         const opaklık = Math.sin(oran * Math.PI) * 0.6;
         ctx.fillStyle = geceye ? 
@@ -362,9 +340,7 @@ class ArayuzYoneticisi {
         ctx.textAlign = 'left';
     }
 
-    /**
-     * Ekran bildirimlerini çizer ve günceller
-     */
+    // bildirimleri guncelle ve ciz
     bildirimleriGuncelle(ctx, deltaZaman) {
         for (let i = this.bildirimler.length - 1; i >= 0; i--) {
             const bildirim = this.bildirimler[i];
@@ -386,9 +362,7 @@ class ArayuzYoneticisi {
         }
     }
 
-    /**
-     * Yeni bildirim ekler (hasar sayısı, kaynak kazanımı vs.)
-     */
+    // yeni bildirim ekle
     bildirimEkle(metin, x, y, renk = '#FFF') {
         this.bildirimler.push({
             metin: metin,
@@ -400,9 +374,7 @@ class ArayuzYoneticisi {
         });
     }
 
-    /**
-     * Fare konumuna göre panel bina buton tespiti
-     */
+    // fare hangi butonun uzerinde
     panelFareKontrol(fareX, fareY) {
         const panelY = GRID_SATIR * HUCRE_BOYUTU;
         const butonGenislik = 65;
@@ -423,34 +395,26 @@ class ArayuzYoneticisi {
         return null;
     }
 
-    /**
-     * "Geceyi Başlat" butonuna tıklanıp tıklanmadığını kontrol eder
-     */
+
     geceButonuKontrol(fareX, fareY) {
         const sagX = CANVAS_GENISLIK - 200;
         const panelY = GRID_SATIR * HUCRE_BOYUTU;
         return noktaDikdortgenIcinde(fareX, fareY, sagX + 100, panelY + 35, 90, 28);
     }
 
-    /**
-     * Menü "Başla" butonuna tıklanıp tıklanmadığını kontrol eder
-     */
+
     baslaButonuKontrol(fareX, fareY) {
         return noktaDikdortgenIcinde(fareX, fareY, 
             CANVAS_GENISLIK / 2 - 100, 320, 200, 50);
     }
 
-    /**
-     * "Tekrar Oyna" butonuna tıklanıp tıklanmadığını kontrol eder
-     */
+
     tekrarButonuKontrol(fareX, fareY) {
         return noktaDikdortgenIcinde(fareX, fareY, 
             CANVAS_GENISLIK / 2 - 100, 340, 200, 50);
     }
 
-    /**
-     * Yuvarlatılmış dikdörtgen çizer (path oluşturur, fill/stroke yapılmalı)
-     */
+    // yuvarlatilmis dikdortgen path olustur
     _yuvarlatilmisDikdortgen(ctx, x, y, genislik, yukseklik, yaricap) {
         ctx.beginPath();
         ctx.moveTo(x + yaricap, y);

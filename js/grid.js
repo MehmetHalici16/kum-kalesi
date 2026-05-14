@@ -1,8 +1,4 @@
-/**
- * grid.js - Grid (Izgara) Sistemi
- * Oyun haritasını grid tabanlı olarak yönetir.
- * Her hücre bir bina veya engel içerebilir.
- */
+// grid.js - Harita grid sistemi
 
 // Hücre türleri
 const HUCRE_TURU = {
@@ -13,11 +9,7 @@ const HUCRE_TURU = {
 };
 
 class Hucre {
-    /**
-     * Tek bir grid hücresini temsil eder
-     * @param {number} sutun - Sütun numarası
-     * @param {number} satir - Satır numarası
-     */
+
     constructor(sutun, satir) {
         this.sutun = sutun;
         this.satir = satir;
@@ -29,9 +21,7 @@ class Hucre {
         this.y = satir * HUCRE_BOYUTU;
     }
 
-    /**
-     * Hücrenin merkez koordinatlarını döndürür
-     */
+
     merkez() {
         return {
             x: this.x + HUCRE_BOYUTU / 2,
@@ -39,16 +29,11 @@ class Hucre {
         };
     }
 
-    /**
-     * Hücreye bina yerleştirilebilir mi kontrol eder
-     */
     yerlestirilebilirMi() {
         return this.tur === HUCRE_TURU.BOS;
     }
 
-    /**
-     * Hücreyi temizler (bina kaldırma)
-     */
+
     temizle() {
         this.tur = HUCRE_TURU.BOS;
         this.bina = null;
@@ -73,9 +58,7 @@ class Grid {
         this._engellerOlustur();
     }
 
-    /**
-     * Kaleyi grid merkezine yerleştirir
-     */
+    // kaleyi merkeze yerlestir
     _kaleYerlestir() {
         for (let s = 0; s < KALE_YUKSEKLIK; s++) {
             for (let k = 0; k < KALE_GENISLIK; k++) {
@@ -85,9 +68,7 @@ class Grid {
         }
     }
 
-    /**
-     * Haritaya rastgele engeller (kayalar) ekler
-     */
+    // rastgele engeller (kayalar)
     _engellerOlustur() {
         const engelSayisi = rastgeleTamSayi(6, 10);
         let eklenen = 0;
@@ -106,17 +87,13 @@ class Grid {
         }
     }
 
-    /**
-     * Bir hücrenin kaleye yakın olup olmadığını kontrol eder
-     */
+
     _kaleYakinindaMi(sutun, satir) {
         return sutun >= KALE_SUTUN - 2 && sutun <= KALE_SUTUN + KALE_GENISLIK + 1 &&
                satir >= KALE_SATIR - 2 && satir <= KALE_SATIR + KALE_YUKSEKLIK + 1;
     }
 
-    /**
-     * Belirtilen konumdaki hücreyi döndürür
-     */
+
     hucreAl(sutun, satir) {
         if (gridIcindeMi(sutun, satir)) {
             return this.hucreler[satir][sutun];
@@ -124,10 +101,7 @@ class Grid {
         return null;
     }
 
-    /**
-     * Belirtilen konuma bina yerleştirir
-     * @returns {boolean} Başarılı ise true
-     */
+    // bina yerlestir
     binaYerlestir(sutun, satir, bina) {
         const hucre = this.hucreAl(sutun, satir);
         if (hucre && hucre.yerlestirilebilirMi()) {
@@ -142,10 +116,7 @@ class Grid {
         return false;
     }
 
-    /**
-     * Belirtilen konumdaki binayı kaldırır
-     * @returns {object|null} Kaldırılan bina
-     */
+    // bina kaldir
     binaKaldir(sutun, satir) {
         const hucre = this.hucreAl(sutun, satir);
         if (hucre && hucre.tur === HUCRE_TURU.BINA) {
@@ -156,9 +127,7 @@ class Grid {
         return null;
     }
 
-    /**
-     * Tüm binaları içeren diziyi döndürür
-     */
+
     tumBinalariAl() {
         const binalar = [];
         for (let satir = 0; satir < GRID_SATIR; satir++) {
@@ -171,9 +140,7 @@ class Grid {
         return binalar;
     }
 
-    /**
-     * Grid'i sıfırlar (yeni oyun için)
-     */
+
     sifirla() {
         for (let satir = 0; satir < GRID_SATIR; satir++) {
             for (let sutun = 0; sutun < GRID_SUTUN; sutun++) {
@@ -184,9 +151,7 @@ class Grid {
         this._engellerOlustur();
     }
 
-    /**
-     * Grid çizgilerini ve hücreleri canvas üzerine çizer
-     */
+    // grid cizimi
     ciz(ctx, fareX, fareY, seciliBinaTuru, kaynaklar) {
         // Zemin çiz - çöl kum dokusu
         for (let satir = 0; satir < GRID_SATIR; satir++) {
@@ -246,9 +211,7 @@ class Grid {
         }
     }
 
-    /**
-     * Engel (kaya) çizer
-     */
+    // kaya cizimi
     _engelCiz(ctx, x, y) {
         ctx.fillStyle = '#8D7B68';
         // Ana kaya şekli

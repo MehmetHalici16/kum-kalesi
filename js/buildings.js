@@ -1,7 +1,4 @@
-/**
- * buildings.js - Bina Sistemi
- * Oyundaki tüm bina türlerini, özelliklerini ve çizim fonksiyonlarını içerir.
- */
+// buildings.js - Bina sistemi
 
 // Bina türleri
 const BINA_TURU = {
@@ -87,9 +84,7 @@ const BINA_VERILERI = {
     }
 };
 
-/**
- * Bina temel sınıfı
- */
+// Bina sınıfı
 class Bina {
     constructor(tur) {
         this.tur = tur;
@@ -132,8 +127,7 @@ class Bina {
     }
 
     /**
-     * Binaya hasar verir
-     * @returns {boolean} Bina yıkıldıysa true
+     * Binaya hasar ver
      */
     hasarAl(miktar) {
         this.can -= miktar;
@@ -146,9 +140,7 @@ class Bina {
         return false;
     }
 
-    /**
-     * Binayı günceller (her karede çağrılır)
-     */
+    // her karede guncellenir
     guncelle(deltaZaman, dusmanlar, mermiler) {
         // Animasyonları güncelle
         if (this.hasarAnimasyon > 0) {
@@ -164,9 +156,7 @@ class Bina {
         }
     }
 
-    /**
-     * En yakın düşmanı bulur ve ateş eder
-     */
+    // en yakin dusmani bul, ates et
     _hedefAraVeAtes(deltaZaman, dusmanlar, mermiler) {
         const merkezX = this.x + HUCRE_BOYUTU / 2;
         const merkezY = this.y + HUCRE_BOYUTU / 2;
@@ -215,9 +205,7 @@ class Bina {
         }
     }
 
-    /**
-     * Binayı canvas üzerine çizer
-     */
+    // canvas uzerine ciz
     ciz(ctx) {
         // Yerleşim animasyonu - hafif bounce efekti
         let olcek = 1;
@@ -261,9 +249,7 @@ class Bina {
         }
     }
 
-    /**
-     * Can çubuğu çizer
-     */
+    // can cubugu goster
     _canCubugu(ctx) {
         const cubukGenislik = HUCRE_BOYUTU - 8;
         const cubukYukseklik = 4;
@@ -282,13 +268,11 @@ class Bina {
     }
 }
 
-// ==================== BİNA ÇİZİM FONKSİYONLARI ====================
-// Her bina türü için ayrı çizim fonksiyonu
+// ==================== BİNA ÇİZİMLERİ ====================
+
 
 const BINA_CIZIMLERI = {
-    /**
-     * Taş duvar çizimi
-     */
+    // TAS DUVAR
     [BINA_TURU.DUVAR]: function(ctx, x, y) {
         // Ana duvar gövdesi
         ctx.fillStyle = RENKLER.DUVAR;
@@ -313,9 +297,7 @@ const BINA_CIZIMLERI = {
         }
     },
 
-    /**
-     * Okçu kulesi çizimi
-     */
+    // OKCU KULESI
     [BINA_TURU.OKCU_KULESI]: function(ctx, x, y) {
         // Kule tabanı
         ctx.fillStyle = RENKLER.KULE_AHSAP_KOYU;
@@ -340,9 +322,7 @@ const BINA_CIZIMLERI = {
         ctx.fillRect(x + 15, y + 22, 10, 3);
     },
 
-    /**
-     * Top kulesi çizimi
-     */
+    // TOP KULESI
     [BINA_TURU.TOP_KULESI]: function(ctx, x, y) {
         // Geniş kule tabanı
         ctx.fillStyle = RENKLER.KULE_TOP_KOYU;
@@ -368,9 +348,7 @@ const BINA_CIZIMLERI = {
         ctx.fillRect(x + 15, y + 26, 10, 4);
     },
 
-    /**
-     * Ev çizimi
-     */
+    // EV
     [BINA_TURU.EV]: function(ctx, x, y) {
         // Ev gövdesi
         ctx.fillStyle = RENKLER.EV;
@@ -395,9 +373,7 @@ const BINA_CIZIMLERI = {
         ctx.fillRect(x + 26, y + 20, 5, 5);
     },
 
-    /**
-     * Çiftlik çizimi
-     */
+    // CIFTLIK
     [BINA_TURU.CIFTLIK]: function(ctx, x, y) {
         // Toprak
         ctx.fillStyle = '#795548';
@@ -423,9 +399,7 @@ const BINA_CIZIMLERI = {
         ctx.strokeRect(x + 2, y + 8, 36, 28);
     },
 
-    /**
-     * Maden çizimi
-     */
+    // MADEN
     [BINA_TURU.MADEN]: function(ctx, x, y) {
         // Maden girişi (karanlık alan)
         ctx.fillStyle = '#37474F';

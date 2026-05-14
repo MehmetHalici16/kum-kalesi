@@ -1,7 +1,4 @@
-/**
- * utils.js - Yardımcı Fonksiyonlar ve Oyun Sabitleri
- * Oyunda kullanılan genel amaçlı yardımcı fonksiyonları ve sabit değerleri içerir.
- */
+// utils.js - Sabitler ve yardımcı fonksiyonlar
 
 // ==================== OYUN SABİTLERİ ====================
 
@@ -102,47 +99,27 @@ const RENKLER = {
 
 // ==================== YARDIMCI FONKSİYONLAR ====================
 
-/**
- * İki nokta arasındaki Öklid mesafesini hesaplar
- * @param {number} x1 - Birinci noktanın x koordinatı
- * @param {number} y1 - Birinci noktanın y koordinatı
- * @param {number} x2 - İkinci noktanın x koordinatı
- * @param {number} y2 - İkinci noktanın y koordinatı
- * @returns {number} İki nokta arasındaki mesafe
- */
+// iki nokta arası mesafe
 function mesafeHesapla(x1, y1, x2, y2) {
     const dx = x2 - x1;
     const dy = y2 - y1;
     return Math.sqrt(dx * dx + dy * dy);
 }
 
-/**
- * Belirtilen aralıkta rastgele tam sayı üretir (min ve max dahil)
- */
 function rastgeleTamSayi(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-/**
- * Belirtilen aralıkta rastgele ondalıklı sayı üretir
- */
 function rastgeleOndalik(min, max) {
     return Math.random() * (max - min) + min;
 }
 
-/**
- * Bir değeri belirli bir aralıkta sınırlandırır
- */
+// clamp
 function sinirla(deger, min, max) {
     return Math.max(min, Math.min(max, deger));
 }
 
-/**
- * Grid koordinatlarını piksel koordinatlarına çevirir
- * @param {number} sutun - Grid sütun numarası
- * @param {number} satir - Grid satır numarası
- * @returns {object} Pikseldeki x ve y koordinatları
- */
+// grid <-> piksel dönüşümleri
 function griddenPiksele(sutun, satir) {
     return {
         x: sutun * HUCRE_BOYUTU,
@@ -150,12 +127,6 @@ function griddenPiksele(sutun, satir) {
     };
 }
 
-/**
- * Piksel koordinatlarını grid koordinatlarına çevirir
- * @param {number} x - Piksel x koordinatı
- * @param {number} y - Piksel y koordinatı
- * @returns {object} Grid sütun ve satır numarası
- */
 function pikseledenGride(x, y) {
     return {
         sutun: Math.floor(x / HUCRE_BOYUTU),
@@ -163,54 +134,36 @@ function pikseledenGride(x, y) {
     };
 }
 
-/**
- * Bir noktanın grid alanı içinde olup olmadığını kontrol eder
- */
 function gridIcindeMi(sutun, satir) {
     return sutun >= 0 && sutun < GRID_SUTUN && satir >= 0 && satir < GRID_SATIR;
 }
 
-/**
- * İki dikdörtgenin çarpışıp çarpışmadığını kontrol eder
- */
+// AABB çarpışma kontrolü
 function dikdortgenCarpisma(x1, y1, g1, u1, x2, y2, g2, u2) {
     return x1 < x2 + g2 && x1 + g1 > x2 && y1 < y2 + u2 && y1 + u1 > y2;
 }
 
-/**
- * Bir noktanın dikdörtgen içinde olup olmadığını kontrol eder
- */
 function noktaDikdortgenIcinde(noktaX, noktaY, dikX, dikY, dikG, dikU) {
     return noktaX >= dikX && noktaX <= dikX + dikG &&
            noktaY >= dikY && noktaY <= dikY + dikU;
 }
 
-/**
- * Daire ile dikdörtgen çarpışma kontrolü
- */
+// daire-dikdortgen carpisma
 function daireDikdortgenCarpisma(daireX, daireY, yaricap, dikX, dikY, dikG, dikU) {
     const yakinX = sinirla(daireX, dikX, dikX + dikG);
     const yakinY = sinirla(daireY, dikY, dikY + dikU);
     return mesafeHesapla(daireX, daireY, yakinX, yakinY) <= yaricap;
 }
 
-/**
- * İki nokta arasındaki açıyı radyan cinsinden hesaplar
- */
 function aciHesapla(x1, y1, x2, y2) {
     return Math.atan2(y2 - y1, x2 - x1);
 }
 
-/**
- * Yumuşak geçiş (easing) fonksiyonu - quadratic ease in/out
- */
+// easeInOut - smooth geçiş için
 function yumusakGecis(t) {
     return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
 }
 
-/**
- * Bir hücrenin merkez piksel koordinatlarını döndürür
- */
 function hucreMerkezi(sutun, satir) {
     return {
         x: sutun * HUCRE_BOYUTU + HUCRE_BOYUTU / 2,
@@ -218,9 +171,7 @@ function hucreMerkezi(sutun, satir) {
     };
 }
 
-/**
- * Sayıyı formatlar (1000 -> 1K gibi)
- */
+// 1000 -> 1K seklinde formatlama
 function sayiFormatla(sayi) {
     if (sayi >= 1000) {
         return (sayi / 1000).toFixed(1) + 'K';
