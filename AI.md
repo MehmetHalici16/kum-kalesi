@@ -1,4 +1,4 @@
-# AI.md - Yapay Zeka Araçları Kullanım Dökümantasyonu
+# Yapay Zeka Kullanım Bilgisi
 
 Bu projede bazı teknik sorular için yapay zeka aracından yararlanılmıştır.
 
