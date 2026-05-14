@@ -1,5 +1,4 @@
 // grid.js - Harita grid sistemi
-
 // Hücre türleri
 const HUCRE_TURU = {
     BOS: 'bos',
@@ -7,39 +6,30 @@ const HUCRE_TURU = {
     KALE: 'kale',
     ENGEL: 'engel' // Doğal engeller (kayalar vb.)
 };
-
 class Hucre {
-
     constructor(sutun, satir) {
         this.sutun = sutun;
         this.satir = satir;
         this.tur = HUCRE_TURU.BOS;
         this.bina = null; // Bina nesnesi referansı
-
         // Piksel koordinatları
         this.x = sutun * HUCRE_BOYUTU;
         this.y = satir * HUCRE_BOYUTU;
     }
-
-
     merkez() {
         return {
             x: this.x + HUCRE_BOYUTU / 2,
             y: this.y + HUCRE_BOYUTU / 2
         };
     }
-
     yerlestirilebilirMi() {
         return this.tur === HUCRE_TURU.BOS;
     }
-
-
     temizle() {
         this.tur = HUCRE_TURU.BOS;
         this.bina = null;
     }
 }
-
 class Grid {
     constructor() {
         // 2D hücre dizisi oluştur
@@ -50,14 +40,11 @@ class Grid {
                 this.hucreler[satir][sutun] = new Hucre(sutun, satir);
             }
         }
-
         // Kale hücrelerini işaretle
         this._kaleYerlestir();
-        
         // Doğal engeller ekle (dekoratif kayalar)
         this._engellerOlustur();
     }
-
     // kaleyi merkeze yerlestir
     _kaleYerlestir() {
         for (let s = 0; s < KALE_YUKSEKLIK; s++) {
@@ -67,17 +54,14 @@ class Grid {
             }
         }
     }
-
     // rastgele engeller (kayalar)
     _engellerOlustur() {
         const engelSayisi = rastgeleTamSayi(6, 10);
         let eklenen = 0;
-
         while (eklenen < engelSayisi) {
             const sutun = rastgeleTamSayi(0, GRID_SUTUN - 1);
             const satir = rastgeleTamSayi(0, GRID_SATIR - 1);
             const hucre = this.hucreler[satir][sutun];
-
             // Kale veya zaten dolu hücrelere engel koymayalım
             // Ayrıca kalenin hemen çevresine de engel koymayalım
             if (hucre.tur === HUCRE_TURU.BOS && !this._kaleYakinindaMi(sutun, satir)) {
@@ -86,21 +70,16 @@ class Grid {
             }
         }
     }
-
-
     _kaleYakinindaMi(sutun, satir) {
         return sutun >= KALE_SUTUN - 2 && sutun <= KALE_SUTUN + KALE_GENISLIK + 1 &&
                satir >= KALE_SATIR - 2 && satir <= KALE_SATIR + KALE_YUKSEKLIK + 1;
     }
-
-
     hucreAl(sutun, satir) {
         if (gridIcindeMi(sutun, satir)) {
             return this.hucreler[satir][sutun];
         }
         return null;
     }
-
     // bina yerlestir
     binaYerlestir(sutun, satir, bina) {
         const hucre = this.hucreAl(sutun, satir);
@@ -115,7 +94,6 @@ class Grid {
         }
         return false;
     }
-
     // bina kaldir
     binaKaldir(sutun, satir) {
         const hucre = this.hucreAl(sutun, satir);
@@ -126,8 +104,6 @@ class Grid {
         }
         return null;
     }
-
-
     tumBinalariAl() {
         const binalar = [];
         for (let satir = 0; satir < GRID_SATIR; satir++) {
@@ -139,8 +115,6 @@ class Grid {
         }
         return binalar;
     }
-
-
     sifirla() {
         for (let satir = 0; satir < GRID_SATIR; satir++) {
             for (let sutun = 0; sutun < GRID_SUTUN; sutun++) {
@@ -150,26 +124,22 @@ class Grid {
         this._kaleYerlestir();
         this._engellerOlustur();
     }
-
     // grid cizimi
     ciz(ctx, fareX, fareY, seciliBinaTuru, kaynaklar) {
         // Zemin çiz - çöl kum dokusu
         for (let satir = 0; satir < GRID_SATIR; satir++) {
             for (let sutun = 0; sutun < GRID_SUTUN; sutun++) {
                 const hucre = this.hucreler[satir][sutun];
-                
                 // Hücre arkaplan rengi - hafif varyasyon ile doğal görünüm
                 const parlaklik = ((sutun + satir) % 2 === 0) ? 0 : 1;
                 ctx.fillStyle = parlaklik ? RENKLER.KUM_ACIK : RENKLER.KUM_KOYU;
                 ctx.fillRect(hucre.x, hucre.y, HUCRE_BOYUTU, HUCRE_BOYUTU);
-                
                 // Engelleri çiz (kayalar)
                 if (hucre.tur === HUCRE_TURU.ENGEL) {
                     this._engelCiz(ctx, hucre.x, hucre.y);
                 }
             }
         }
-
         // Grid çizgileri
         ctx.strokeStyle = RENKLER.GRID_CIZGI;
         ctx.lineWidth = 0.5;
@@ -185,22 +155,18 @@ class Grid {
             ctx.lineTo(sutun * HUCRE_BOYUTU, GRID_SATIR * HUCRE_BOYUTU);
             ctx.stroke();
         }
-
         // Fare altındaki hücreyi vurgula (bina yerleştirme modu)
         if (seciliBinaTuru && fareX !== null && fareY !== null) {
             const gridPos = pikseledenGride(fareX, fareY);
             if (gridIcindeMi(gridPos.sutun, gridPos.satir)) {
                 const hucre = this.hucreAl(gridPos.sutun, gridPos.satir);
                 const binaVerisi = BINA_VERILERI[seciliBinaTuru];
-                
                 // Yeterli kaynak ve boş hücre varsa yeşil, yoksa kırmızı vurgula
                 const yerlestirilebilir = hucre.yerlestirilebilirMi() && 
                     kaynaklar.yeterliMi(binaVerisi.altinMaliyet, binaVerisi.tasMaliyet, binaVerisi.yiyecekMaliyet);
-                
                 ctx.fillStyle = yerlestirilebilir ? RENKLER.GRID_VURGU : RENKLER.GRID_GECERSIZ;
                 ctx.fillRect(gridPos.sutun * HUCRE_BOYUTU, gridPos.satir * HUCRE_BOYUTU, 
                            HUCRE_BOYUTU, HUCRE_BOYUTU);
-
                 // Bina önizleme gölgesi
                 if (yerlestirilebilir) {
                     ctx.globalAlpha = 0.5;
@@ -210,7 +176,6 @@ class Grid {
             }
         }
     }
-
     // kaya cizimi
     _engelCiz(ctx, x, y) {
         ctx.fillStyle = '#8D7B68';
@@ -225,7 +190,6 @@ class Grid {
         ctx.lineTo(x + 28, y + 34);
         ctx.closePath();
         ctx.fill();
-        
         // Kaya gölgesi
         ctx.fillStyle = '#6D5D4E';
         ctx.beginPath();

@@ -1,7 +1,5 @@
 // projectiles.js - Mermi sistemi (ok ve top)
-
 class Mermi {
-
     constructor(x, y, hedef, hasar, tur, patlamaYaricapi) {
         this.x = x;
         this.y = y;
@@ -10,47 +8,36 @@ class Mermi {
         this.tur = tur;
         this.patlamaYaricapi = patlamaYaricapi;
         this.aktifMi = true;
-        
         // Mermi hızı (piksel/saniye)
         this.hiz = tur === 'ok' ? 350 : 200;
-        
         // Mermi boyutu
         this.boyut = tur === 'ok' ? 3 : 5;
-        
         // Yörünge açısı
         this.aci = aciHesapla(x, y, hedef.x, hedef.y);
-        
         // İz efekti için önceki konumlar
         this.iz = [];
         this.izMaxUzunluk = tur === 'ok' ? 5 : 3;
     }
-
     // hareket + carpisma kontrolu
     guncelle(deltaZaman, dusmanlar, parcaciklar) {
         if (!this.aktifMi) return null;
-
         // İz kaydı
         this.iz.push({ x: this.x, y: this.y });
         if (this.iz.length > this.izMaxUzunluk) {
             this.iz.shift();
         }
-
         // Hedef hâlâ yaşıyorsa hedefi takip et
         if (this.hedef && this.hedef.pikseldeMi) {
             this.aci = aciHesapla(this.x, this.y, this.hedef.x, this.hedef.y);
         }
-
         // Hareket ettir
         this.x += Math.cos(this.aci) * this.hiz * deltaZaman;
         this.y += Math.sin(this.aci) * this.hiz * deltaZaman;
-
         // Hedefle çarpışma kontrolü
         if (this.hedef && this.hedef.pikseldeMi) {
             const mesafe = mesafeHesapla(this.x, this.y, this.hedef.x, this.hedef.y);
-            
             if (mesafe < this.hedef.boyut + this.boyut) {
                 this.aktifMi = false;
-
                 if (this.tur === 'top' && this.patlamaYaricapi > 0) {
                     // Top mermisi - alan hasarı
                     return this._patla(dusmanlar, parcaciklar);
@@ -58,37 +45,29 @@ class Mermi {
                     // Ok mermisi - tek hedef hasarı
                     const oldu = this.hedef.hasarAl(this.hasar);
                     sesYoneticisi.hasarSesi();
-                    
                     // Çarpma parçacıkları
                     this._carpmaEfekti(parcaciklar);
-                    
                     return oldu ? { olduMu: true, dusman: this.hedef } : null;
                 }
             }
         }
-
         // Ekran dışına çıktıysa deaktif et
         if (this.x < -50 || this.x > CANVAS_GENISLIK + 50 ||
             this.y < -50 || this.y > CANVAS_YUKSEKLIK + 50) {
             this.aktifMi = false;
         }
-
         // Hedef öldüyse de deaktif et
         if (this.hedef && !this.hedef.pikseldeMi) {
             this.aktifMi = false;
         }
-
         return null;
     }
-
     // top patlama - alan hasari
     _patla(dusmanlar, parcaciklar) {
         const oluler = [];
-        
         // Patlama alanındaki tüm düşmanlara hasar ver
         for (const dusman of dusmanlar) {
             if (!dusman.pikseldeMi) continue;
-            
             const mesafe = mesafeHesapla(this.x, this.y, dusman.x, dusman.y);
             if (mesafe <= this.patlamaYaricapi) {
                 // Mesafeye göre hasar azalması
@@ -99,7 +78,6 @@ class Mermi {
                 }
             }
         }
-
         // Patlama parçacıkları
         if (parcaciklar) {
             for (let i = 0; i < 15; i++) {
@@ -125,14 +103,11 @@ class Mermi {
                 ));
             }
         }
-
         return { olduMu: oluler.length > 0, oluler: oluler };
     }
-
     // carpisma parcacik efekti
     _carpmaEfekti(parcaciklar) {
         if (!parcaciklar) return;
-        
         for (let i = 0; i < 5; i++) {
             parcaciklar.push(new Parcacik(
                 this.x, this.y,
@@ -144,11 +119,9 @@ class Mermi {
             ));
         }
     }
-
     // ciz
     ciz(ctx) {
         if (!this.aktifMi) return;
-
         // İz çiz
         for (let i = 0; i < this.iz.length; i++) {
             const opaklık = (i / this.iz.length) * 0.4;
@@ -159,11 +132,9 @@ class Mermi {
             ctx.arc(this.iz[i].x, this.iz[i].y, this.boyut * 0.5, 0, Math.PI * 2);
             ctx.fill();
         }
-
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.rotate(this.aci);
-
         if (this.tur === 'ok') {
             // Ok çizimi
             ctx.fillStyle = RENKLER.MERMI_OK;
@@ -173,11 +144,9 @@ class Mermi {
             ctx.lineTo(-4, 2.5);
             ctx.closePath();
             ctx.fill();
-            
             // Ok gövdesi
             ctx.fillStyle = '#8D6E63';
             ctx.fillRect(-8, -1, 10, 2);
-            
             // Ok tüyleri
             ctx.fillStyle = '#ECEFF1';
             ctx.beginPath();
@@ -193,14 +162,12 @@ class Mermi {
             ctx.beginPath();
             ctx.arc(0, 0, this.boyut, 0, Math.PI * 2);
             ctx.fill();
-            
             // Parlama efekti
             ctx.fillStyle = 'rgba(255, 200, 100, 0.5)';
             ctx.beginPath();
             ctx.arc(-1, -1, this.boyut * 0.5, 0, Math.PI * 2);
             ctx.fill();
         }
-
         ctx.restore();
     }
 }

@@ -1,5 +1,4 @@
 // resources.js - Kaynak yonetimi (altin, tas, yiyecek)
-
 class KaynakYoneticisi {
     constructor() {
         // Başlangıç kaynakları
@@ -8,8 +7,6 @@ class KaynakYoneticisi {
         this.yiyecek = BASLANGIC_YIYECEK;
         this.skor = 0;
     }
-
-
     kaynakEkle(tur, miktar) {
         switch (tur) {
             case 'altin':
@@ -23,7 +20,6 @@ class KaynakYoneticisi {
                 break;
         }
     }
-
     // kaynak harcama - yeterli yoksa false doner
     kaynakHarca(altinMaliyet, tasMaliyet, yiyecekMaliyet) {
         if (this.altin >= altinMaliyet && 
@@ -36,20 +32,14 @@ class KaynakYoneticisi {
         }
         return false;
     }
-
-
     yeterliMi(altinMaliyet, tasMaliyet, yiyecekMaliyet) {
         return this.altin >= altinMaliyet && 
                this.tas >= tasMaliyet && 
                this.yiyecek >= yiyecekMaliyet;
     }
-
-
     skorEkle(miktar) {
         this.skor += miktar;
     }
-
-
     sifirla() {
         this.altin = BASLANGIC_ALTIN;
         this.tas = BASLANGIC_TAS;

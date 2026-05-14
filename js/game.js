@@ -1,5 +1,4 @@
 // game.js - Ana oyun döngüsü
-
 class Oyun {
     constructor() {
         // Canvas ayarları
@@ -7,40 +6,32 @@ class Oyun {
         this.ctx = this.canvas.getContext('2d');
         this.canvas.width = CANVAS_GENISLIK;
         this.canvas.height = CANVAS_YUKSEKLIK;
-
         // Oyun sistemleri
         this.grid = new Grid();
         this.kaynaklar = new KaynakYoneticisi();
         this.dalgaYoneticisi = new DalgaYoneticisi();
         this.arayuz = new ArayuzYoneticisi();
         this.parcacikYoneticisi = new ParcacikYoneticisi();
-
         // Oyun durumu
         this.durum = OYUN_DURUMU.MENU;
         this.kaleCan = KALE_MAX_CAN;
         this.gunSayaci = GUNDUZ_SURESI;
         this.gecisZamani = 0;
         this.gecisSuresi = 1.5;
-
         // Oyun nesneleri
         this.dusmanlar = [];
         this.mermiler = [];
-
         // Zamanlama
         this.sonKare = 0;
         this.toplamZaman = 0;
-
         // Fare durumu
         this.fareX = null;
         this.fareY = null;
-
         // Olay dinleyicileri
         this._olaylariDinle();
-
         // Oyun döngüsünü başlat
         requestAnimationFrame((z) => this._oyunDongusu(z));
     }
-
     // Olaylar
     _olaylariDinle() {
         // Fare hareketleri
@@ -54,7 +45,6 @@ class Oyun {
                 this.arayuz.panelFareKontrol(this.fareX, this.fareY);
             }
         });
-
         // Fare tıklama
         this.canvas.addEventListener('click', (e) => {
             const rect = this.canvas.getBoundingClientRect();
@@ -64,7 +54,6 @@ class Oyun {
             const tY = (e.clientY - rect.top) * olcekY;
             this._tiklamaIsleme(tX, tY);
         });
-
         // Sağ tıklama - bina seçimini iptal et
         this.canvas.addEventListener('contextmenu', (e) => {
             e.preventDefault();
@@ -73,31 +62,26 @@ class Oyun {
                 sesYoneticisi.butonSesi();
             }
         });
-
         // Klavye
         document.addEventListener('keydown', (e) => {
             this._tusIsleme(e.key);
         });
     }
-
     // Tıklama
     _tiklamaIsleme(tX, tY) {
         sesYoneticisi.baslat(); // İlk etkileşimde Audio Context başlat
-
         if (this.durum === OYUN_DURUMU.MENU) {
             if (this.arayuz.baslaButonuKontrol(tX, tY)) {
                 this._oyunuBaslat();
             }
             return;
         }
-
         if (this.durum === OYUN_DURUMU.OYUN_BITTI) {
             if (this.arayuz.tekrarButonuKontrol(tX, tY)) {
                 this._oyunuBaslat();
             }
             return;
         }
-
         if (this.durum === OYUN_DURUMU.GUNDUZ) {
             // Panel bina seçimi
             const panelBina = this.arayuz.panelFareKontrol(tX, tY);
@@ -106,20 +90,17 @@ class Oyun {
                 sesYoneticisi.butonSesi();
                 return;
             }
-
             // "Geceyi Başlat" butonu
             if (this.arayuz.geceButonuKontrol(tX, tY)) {
                 this._geceyeGec();
                 return;
             }
-
             // Grid üzerine bina yerleştirme
             if (this.arayuz.secilenBinaTuru && tY < GRID_SATIR * HUCRE_BOYUTU) {
                 this._binaYerlestir(tX, tY);
             }
         }
     }
-
     // Klavye
     _tusIsleme(tus) {
         if (this.durum === OYUN_DURUMU.GUNDUZ) {
@@ -131,30 +112,24 @@ class Oyun {
                 this.arayuz.secilenBinaTuru = (this.arayuz.secilenBinaTuru === yeniTur) ? null : yeniTur;
                 sesYoneticisi.butonSesi();
             }
-
             // Escape - iptal
             if (tus === 'Escape') {
                 this.arayuz.secilenBinaTuru = null;
             }
-
             // Space - geceyi başlat
             if (tus === ' ') {
                 this._geceyeGec();
             }
         }
-
         // M - müzik aç/kapa
         if (tus === 'm' || tus === 'M') {
             sesYoneticisi.muzikAcKapa();
         }
-
         // S - ses aç/kapa
         if (tus === 's' || tus === 'S') {
             sesYoneticisi.sesAcKapa();
         }
     }
-
-
     _oyunuBaslat() {
         this.grid = new Grid();
         this.kaynaklar.sifirla();
@@ -170,28 +145,22 @@ class Oyun {
         sesYoneticisi.gunduzMuzigi();
         sesYoneticisi.gunduzBaslangiçSesi();
     }
-
-
     _binaYerlestir(tX, tY) {
         const gridPos = pikseledenGride(tX, tY);
         if (!gridIcindeMi(gridPos.sutun, gridPos.satir)) return;
-
         const binaTuru = this.arayuz.secilenBinaTuru;
         const veri = BINA_VERILERI[binaTuru];
-
         // Kaynak kontrolü
         if (!this.kaynaklar.yeterliMi(veri.altinMaliyet, veri.tasMaliyet, veri.yiyecekMaliyet)) {
             this.arayuz.bildirimEkle('Yetersiz kaynak!', tX, tY, '#F44336');
             return;
         }
-
         // Hücre uygunluk kontrolü
         const hucre = this.grid.hucreAl(gridPos.sutun, gridPos.satir);
         if (!hucre || !hucre.yerlestirilebilirMi()) {
             this.arayuz.bildirimEkle('Buraya inşa edilemez!', tX, tY, '#F44336');
             return;
         }
-
         // Binayı oluştur ve yerleştir
         const yeniBina = new Bina(binaTuru);
         if (this.grid.binaYerlestir(gridPos.sutun, gridPos.satir, yeniBina)) {
@@ -201,21 +170,16 @@ class Oyun {
             this.arayuz.bildirimEkle(veri.isim + ' inşa edildi', tX, tY - 20, '#4CAF50');
         }
     }
-
-
     _geceyeGec() {
         this.durum = OYUN_DURUMU.GECE_GECIS;
         this.gecisZamani = 0;
         sesYoneticisi.geceBaslangiçSesi();
     }
-
-
     _gunduzeGec() {
         this.durum = OYUN_DURUMU.GUNDUZ_GECIS;
         this.gecisZamani = 0;
         sesYoneticisi.gunduzBaslangiçSesi();
     }
-
     // Üretim binalarından kaynak toplama
     _kaynaklariTopla() {
         const binalar = this.grid.tumBinalariAl();
@@ -230,29 +194,22 @@ class Oyun {
         }
         sesYoneticisi.kaynakSesi();
     }
-
     // ==================== ANA OYUN DÖNGÜSÜ ====================
-
     _oyunDongusu(zamanDamgasi) {
         // Delta zaman hesapla (saniye cinsinden)
         const deltaZaman = Math.min((zamanDamgasi - this.sonKare) / 1000, 0.05);
         this.sonKare = zamanDamgasi;
         this.toplamZaman += deltaZaman;
-
         // Güncelle
         this._guncelle(deltaZaman);
-
         // Çiz
         this._ciz();
-
         // Sonraki kare
         requestAnimationFrame((z) => this._oyunDongusu(z));
     }
-
-    /** Oyun mantıgı */
+    //  Oyun mantıgı 
     _guncelle(dt) {
         if (this.durum === OYUN_DURUMU.MENU || this.durum === OYUN_DURUMU.OYUN_BITTI) return;
-
         // Geçiş animasyonları
         if (this.durum === OYUN_DURUMU.GECE_GECIS) {
             this.gecisZamani += dt;
@@ -264,7 +221,6 @@ class Oyun {
             }
             return;
         }
-
         if (this.durum === OYUN_DURUMU.GUNDUZ_GECIS) {
             this.gecisZamani += dt;
             if (this.gecisZamani >= this.gecisSuresi) {
@@ -276,10 +232,8 @@ class Oyun {
             }
             return;
         }
-
         // Parçacıkları güncelle
         this.parcacikYoneticisi.guncelle(dt);
-
         // GÜNDÜZ güncelleme
         if (this.durum === OYUN_DURUMU.GUNDUZ) {
             this.gunSayaci -= dt;
@@ -288,7 +242,6 @@ class Oyun {
             }
             return;
         }
-
         // GECE güncelleme
         if (this.durum === OYUN_DURUMU.GECE) {
             // Düşman üretimi
@@ -296,18 +249,15 @@ class Oyun {
             if (yeniDusman) {
                 this.dusmanlar.push(yeniDusman);
             }
-
             // Binaları güncelle (kuleler ateş eder)
             const binalar = this.grid.tumBinalariAl();
             for (const bina of binalar) {
                 bina.guncelle(dt, this.dusmanlar, this.mermiler);
             }
-
             // Düşmanları güncelle
             for (let i = this.dusmanlar.length - 1; i >= 0; i--) {
                 const dusman = this.dusmanlar[i];
                 dusman.guncelle(dt, this.grid, this.kaleCan);
-
                 // Kaleye hasar
                 if (dusman.kaleHasar) {
                     this.kaleCan -= dusman.kaleHasar;
@@ -315,7 +265,6 @@ class Oyun {
                         (KALE_SUTUN + 1) * HUCRE_BOYUTU, (KALE_SATIR + 1) * HUCRE_BOYUTU, '#F44336');
                     sesYoneticisi.binaHasarSesi();
                 }
-
                 // Ölen düşmanları temizle
                 if (!dusman.pikseldeMi) {
                     if (!dusman.kaleHasar) { // Kale hasarı değilse öldürülmüştür
@@ -328,7 +277,6 @@ class Oyun {
                     this.dusmanlar.splice(i, 1);
                 }
             }
-
             // Yıkılan binaları kontrol et
             for (let s = 0; s < GRID_SATIR; s++) {
                 for (let k = 0; k < GRID_SUTUN; k++) {
@@ -348,7 +296,6 @@ class Oyun {
                     }
                 }
             }
-
             // Mermileri güncelle
             for (let i = this.mermiler.length - 1; i >= 0; i--) {
                 const sonuc = this.mermiler[i].guncelle(dt, this.dusmanlar, this.parcacikYoneticisi.parcaciklar);
@@ -356,10 +303,8 @@ class Oyun {
                     this.mermiler.splice(i, 1);
                 }
             }
-
             // Parçacıkları güncelle
             this.parcacikYoneticisi.guncelle(dt);
-
             // Kale yıkıldı mı?
             if (this.kaleCan <= 0) {
                 this.kaleCan = 0;
@@ -368,68 +313,54 @@ class Oyun {
                 sesYoneticisi._muzikDurdur();
                 return;
             }
-
             // Tüm düşmanlar öldü ve dalga bitti mi?
             if (this.dalgaYoneticisi.dalgaBittiMi && this.dusmanlar.length === 0) {
                 this._gunduzeGec();
             }
         }
     }
-
     // cizim
     _ciz() {
         const ctx = this.ctx;
         ctx.clearRect(0, 0, CANVAS_GENISLIK, CANVAS_YUKSEKLIK);
-
         // Gökyüzü arkaplanı
         this._gokyuzuCiz(ctx);
-
         // Grid ve zemin
         const seciliBina = (this.durum === OYUN_DURUMU.GUNDUZ) ? this.arayuz.secilenBinaTuru : null;
         this.grid.ciz(ctx, this.fareX, this.fareY, seciliBina, this.kaynaklar);
-
         // Kale çiz
         this._kaleCiz(ctx);
-
         // Binaları çiz
         const binalar = this.grid.tumBinalariAl();
         for (const bina of binalar) {
             bina.ciz(ctx);
         }
-
         // Düşmanları çiz
         for (const dusman of this.dusmanlar) {
             dusman.ciz(ctx);
         }
-
         // Mermileri çiz
         for (const mermi of this.mermiler) {
             mermi.ciz(ctx);
         }
-
         // Parçacıkları çiz
         this.parcacikYoneticisi.ciz(ctx);
-
         // UI paneli
         const geceMi = this.durum === OYUN_DURUMU.GECE || this.durum === OYUN_DURUMU.GECE_GECIS;
         this.arayuz.ustPanelCiz(ctx, this.kaynaklar, geceMi,
             this.dalgaYoneticisi.dalgaNumarasi, this.kaleCan, KALE_MAX_CAN, this.gunSayaci);
-
         // Bildirimleri çiz
         this.arayuz.bildirimleriGuncelle(ctx, (this.sonKare > 0) ? 0.016 : 0);
-
         // Tooltip
         if (this.durum === OYUN_DURUMU.GUNDUZ && this.fareX) {
             this.arayuz.tooltipCiz(ctx, this.fareX, this.fareY);
         }
-
         // Geçiş animasyonları
         if (this.durum === OYUN_DURUMU.GECE_GECIS) {
             this.arayuz.gecisCiz(ctx, this.gecisZamani / this.gecisSuresi, true);
         } else if (this.durum === OYUN_DURUMU.GUNDUZ_GECIS) {
             this.arayuz.gecisCiz(ctx, this.gecisZamani / this.gecisSuresi, false);
         }
-
         // Menü veya oyun bitti ekranı
         if (this.durum === OYUN_DURUMU.MENU) {
             this.arayuz.menuCiz(ctx, this.toplamZaman);
@@ -437,19 +368,16 @@ class Oyun {
             this.arayuz.oyunBittiCiz(ctx, this.kaynaklar, this.dalgaYoneticisi.dalgaNumarasi, this.toplamZaman);
         }
     }
-
     // gok arka planı
     _gokyuzuCiz(ctx) {
         const geceMi = this.durum === OYUN_DURUMU.GECE || this.durum === OYUN_DURUMU.GECE_GECIS;
         const ust = geceMi ? RENKLER.GECE_UST : RENKLER.GUNDUZ_UST;
         const alt = geceMi ? RENKLER.GECE_ALT : RENKLER.GUNDUZ_ALT;
-
         const gradyan = ctx.createLinearGradient(0, 0, 0, GRID_SATIR * HUCRE_BOYUTU);
         gradyan.addColorStop(0, ust);
         gradyan.addColorStop(1, alt);
         ctx.fillStyle = gradyan;
         ctx.fillRect(0, 0, CANVAS_GENISLIK, GRID_SATIR * HUCRE_BOYUTU);
-
         // Gece yıldızları
         if (geceMi) {
             ctx.fillStyle = '#FFF';
@@ -464,18 +392,15 @@ class Oyun {
             ctx.globalAlpha = 1;
         }
     }
-
     // kale cizimi
     _kaleCiz(ctx) {
         const kaleX = KALE_SUTUN * HUCRE_BOYUTU;
         const kaleY = KALE_SATIR * HUCRE_BOYUTU;
         const kaleG = KALE_GENISLIK * HUCRE_BOYUTU;
         const kaleU = KALE_YUKSEKLIK * HUCRE_BOYUTU;
-
         // Kale gövdesi
         ctx.fillStyle = RENKLER.KALE;
         ctx.fillRect(kaleX + 4, kaleY + 12, kaleG - 8, kaleU - 12);
-
         // Üst mazgallar
         ctx.fillStyle = RENKLER.KALE_KOYU;
         ctx.fillRect(kaleX + 2, kaleY + 6, kaleG - 4, 10);
@@ -483,13 +408,11 @@ class Oyun {
         for (let i = 0; i < 7; i++) {
             ctx.fillRect(kaleX + 6 + i * 11, kaleY + 1, 7, 8);
         }
-
         // Kapı
         ctx.fillStyle = '#3E2723';
         ctx.fillRect(kaleX + kaleG / 2 - 8, kaleY + kaleU - 24, 16, 24);
         ctx.fillStyle = RENKLER.KALE_KOYU;
         ctx.fillRect(kaleX + kaleG / 2 - 6, kaleY + kaleU - 22, 12, 2);
-
         // Bayrak
         ctx.fillStyle = '#5D4037';
         ctx.fillRect(kaleX + kaleG / 2 - 1, kaleY - 16, 2, 22);
@@ -501,7 +424,6 @@ class Oyun {
         ctx.lineTo(kaleX + kaleG / 2 + 1, kaleY - 6);
         ctx.closePath();
         ctx.fill();
-
         // Pencereler
         ctx.fillStyle = '#FFF9C4';
         ctx.fillRect(kaleX + 14, kaleY + 22, 6, 6);
@@ -510,7 +432,6 @@ class Oyun {
         ctx.fillRect(kaleX + kaleG - 20, kaleY + 38, 6, 6);
     }
 }
-
 // Sayfa yüklendiğinde oyunu başlat
 window.addEventListener('load', () => {
     new Oyun();

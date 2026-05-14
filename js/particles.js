@@ -1,7 +1,5 @@
 // particles.js - Parcacik efektleri (patlama, toz vs)
-
 class Parcacik {
-
     constructor(x, y, hizX, hizY, omur, boyut, renk) {
         this.x = x;
         this.y = y;
@@ -14,29 +12,21 @@ class Parcacik {
         this.aktifMi = true;
         this.yerCekimi = 60; // Piksel/saniye^2 aşağı ivme
     }
-
-
     guncelle(deltaZaman) {
         if (!this.aktifMi) return;
-
         // Konum güncelle
         this.x += this.hizX * deltaZaman;
         this.y += this.hizY * deltaZaman;
-
         // Yerçekimi uygula
         this.hizY += this.yerCekimi * deltaZaman;
-
         // Ömür azalt
         this.omur -= deltaZaman;
         if (this.omur <= 0) {
             this.aktifMi = false;
         }
     }
-
-
     ciz(ctx) {
         if (!this.aktifMi) return;
-
         const opaklık = this.omur / this.maxOmur;
         ctx.globalAlpha = opaklık;
         ctx.fillStyle = this.renk;
@@ -46,18 +36,14 @@ class Parcacik {
         ctx.globalAlpha = 1;
     }
 }
-
 // parcacik yoneticisi
 class ParcacikYoneticisi {
     constructor() {
         this.parcaciklar = [];
     }
-
-
     ekle(parcacik) {
         this.parcaciklar.push(parcacik);
     }
-
     // insa efekti - toz parcaciklari
     insaEfekti(x, y) {
         for (let i = 0; i < 10; i++) {
@@ -72,7 +58,6 @@ class ParcacikYoneticisi {
             ));
         }
     }
-
     // yikim efekti
     yikimEfekti(x, y) {
         for (let i = 0; i < 20; i++) {
@@ -99,7 +84,6 @@ class ParcacikYoneticisi {
             ));
         }
     }
-
     // dusman olum efekti
     olumEfekti(x, y, renk) {
         for (let i = 0; i < 12; i++) {
@@ -113,7 +97,6 @@ class ParcacikYoneticisi {
             ));
         }
     }
-
     // kaynak toplama pariltisi
     kaynakEfekti(x, y, renk) {
         for (let i = 0; i < 6; i++) {
@@ -128,8 +111,6 @@ class ParcacikYoneticisi {
             ));
         }
     }
-
-
     guncelle(deltaZaman) {
         for (let i = this.parcaciklar.length - 1; i >= 0; i--) {
             this.parcaciklar[i].guncelle(deltaZaman);
@@ -138,15 +119,11 @@ class ParcacikYoneticisi {
             }
         }
     }
-
-
     ciz(ctx) {
         for (const parcacik of this.parcaciklar) {
             parcacik.ciz(ctx);
         }
     }
-
-
     temizle() {
         this.parcaciklar = [];
     }
